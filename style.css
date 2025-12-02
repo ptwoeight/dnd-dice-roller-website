@@ -1,0 +1,75 @@
+body {
+  font-family: "Jersey 10", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: #402408;
+}
+
+header {
+  background-color: #704214;
+  color: #ffe3c7;
+  padding: 20px;
+  text-align: center;
+  border-radius: 1rem;
+}
+
+main {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+#selection-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+}
+
+#secondary-btns {
+  display: flex;
+  justify-content: center;
+}
+
+#clear-btn {
+  background-color: brown;
+}
+
+#selection-area {
+  display: flex;
+  align-items: center;
+  background-color: #5c340c;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+#jumble-btn {
+  background-color: #cf8719;
+  margin: 3rem;
+  width: 12vw;
+  height: 12vh;
+  font-size: 2rem;
+}
+
+#dice-animation {
+  width: 30vw;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 7vw;
+  height: 5vh;
+
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: #a37446;
+  border-radius: 0.5rem;
+}
+
+.options:hover {
+  background-color: #6d4720;
+  color: #ffe3c7;
+}
+

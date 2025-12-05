@@ -27,7 +27,7 @@
                 <div class="options" id="option-d8">
                     d8
                 </div>
-                <div class="options" d="option-d10">
+                <div class="options" id="option-d10">
                     d10
                 </div>
                 <div class="options" id="option-d12">
@@ -47,7 +47,12 @@
             </div>
         </section>
         <section id="selection-area">
-            <video src="dice_roll_reference-ezgif.com-gif-to-mp4-converter.mp4" id="dice-animation"></video>
+            <!-- roll display groups the decorative die and the numeric value so they stack -->
+            <div id="roll-display">
+                <div id="die-bg" aria-hidden="true"></div>
+                <!-- <video src="dice_roll_reference-ezgif.com-gif-to-mp4-converter.mp4" id="dice-animation"></video> -->
+                <p id="roll-value">0</p>
+            </div>
             <div class="options" id="jumble-btn">
                 JUMBLE!
             </div>

@@ -37,10 +37,108 @@ main {
 
 #selection-area {
   display: flex;
+  justify-content: center;
   align-items: center;
   background-color: #5c340c;
   border-radius: 1rem;
   padding: 1rem;
+}
+
+/* make the selection area a positioning context for die background */
+#selection-area {
+  position: relative;
+}
+
+#roll-value {
+  font-size: 5rem;
+  color: #ffe3c7;
+  width: 10vw;
+  text-align: center;
+}
+
+/* group that contains die background and the numeric value so they stack */
+#roll-display {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+}
+
+/* decorative die background behind the roll value */
+#die-bg {
+  position: absolute;
+  /* nudge slightly left to better center behind the number */
+  left: 48%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  /* slightly smaller so it isn't overpowering */
+  width: 14vw;
+  height: 14vw;
+  max-width: 260px;
+  max-height: 260px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0; /* start hidden */
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+/* slow, subtle zoom-in/out that alternates continuously */
+@keyframes dieFloat {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.06); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* when visible, fade in and run float animation */
+#die-bg.visible {
+  opacity: 0.5;
+  visibility: visible;
+  animation: dieFloat 3.6s ease-in-out infinite;
+}
+
+#roll-value {
+  position: relative;
+  z-index: 2;
+  margin: 0; /* remove default paragraph margin */
+}
+
+/* Zoom-in pop animation for the roll value */
+@keyframes zoomPop {
+  0% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#roll-value.animate-pop {
+  animation: zoomPop 0.3s ease-out;
+}
+
+/* Gamified button press animation with bounce and scale */
+@keyframes buttonPress {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 #jumble-btn {
@@ -49,6 +147,31 @@ main {
   width: 12vw;
   height: 12vh;
   font-size: 2rem;
+  transform-origin: center;
+}
+
+#jumble-btn.press {
+  animation: buttonPress 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Error shake animation for invalid click */
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+    background-color: #cf8719;
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-3px);
+    background-color: #d9534f;
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(3px);
+    background-color: #d9534f;
+  }
+}
+
+#jumble-btn.error-shake {
+  animation: errorShake 0.5s ease-in-out;
 }
 
 #dice-animation {
@@ -66,9 +189,22 @@ main {
   text-align: center;
   background-color: #a37446;
   border-radius: 0.5rem;
+  /* Prevent text from being selected when clicking the button */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Remove tap highlight on mobile and show pointer cursor */
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
 .options:hover {
+  background-color: #6d4720;
+  color: #ffe3c7;
+}
+
+.options.active {
   background-color: #6d4720;
   color: #ffe3c7;
 }

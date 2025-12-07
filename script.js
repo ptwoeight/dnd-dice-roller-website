@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // map option ids to media images (files are in /media)
     const dieImageMap = {
-        'option-d4': 'media/d4-filler.png',
-        'option-d6': 'media/d6-filler.png',
-        'option-d8': 'media/d8-filler.png',
-        'option-d10': 'media/d10_-filler.png',
-        'option-d12': 'media/d12-filler.png',
-        'option-d20': 'media/d20-filler.png',
-        'option-d%': 'media/d10_-filler.png'
+        'option-d4': 'media/d4-rotate.webm',
+        'option-d6': 'media/d6-rotate.webm',
+        'option-d8': 'media/d8-rotate.webm',
+        'option-d10': 'media/d10-rotate.webm',
+        'option-d12': 'media/d12-rotate.webm',
+        'option-d20': 'media/d20-rotate.webm',
+        'option-d%': 'media/d10P-rotate.webm'
     };
 
     // add click listener to each option; clicking removes 'active' from all and adds to the clicked one
@@ -22,15 +22,56 @@ document.addEventListener('DOMContentLoaded', () => {
             diceOptions.forEach(o => o.classList.remove('active'));
             option.classList.add('active');
 
-            // update decorative die background to match the selected die
+            // update decorative die background to match the selected die (use looping webm)
             if (dieBg) {
-                const img = dieImageMap[option.id];
-                if (img) {
-                    dieBg.style.backgroundImage = `url('${img}')`;
+                const src = dieImageMap[option.id];
+                const existing = dieBg.querySelector('video');
+
+                // if same source already present, just ensure it's visible and don't recreate
+                if (src && existing && existing.getAttribute('data-src') === src) {
+                    dieBg.classList.add('visible');
+                } else if (src) {
+                    // remove any previous video cleanly
+                    if (existing) {
+                        try { existing.pause(); } catch (e) {}
+                        try { existing.removeAttribute('src'); existing.load(); } catch (e) {}
+                        dieBg.removeChild(existing);
+                    } else {
+                        dieBg.innerHTML = '';
+                    }
+
+                    const vid = document.createElement('video');
+                    // set attributes for reliable autoplay/looping
+                    vid.setAttribute('preload', 'auto');
+                    vid.src = src;
+                    vid.autoplay = true;
+                    vid.loop = true;
+                    vid.muted = true;
+                    vid.playsInline = true;
+                    vid.setAttribute('playsinline', '');
+                    vid.setAttribute('webkit-playsinline', '');
+                    vid.setAttribute('aria-hidden', 'true');
+                    vid.setAttribute('data-src', src);
+                    vid.style.width = '100%';
+                    vid.style.height = '100%';
+                    vid.style.objectFit = 'contain';
+                    // disable CSS opacity transition for immediate switch
+                    vid.style.transition = 'none';
+                    vid.style.display = 'block';
+                    dieBg.appendChild(vid);
+
+                    // try to play (some browsers require a play call even if muted)
+                    const playPromise = vid.play();
+                    if (playPromise && playPromise.catch) playPromise.catch(() => {/* autoplay blocked */});
                     dieBg.classList.add('visible');
                 } else {
+                    // no source mapped for this option
+                    if (existing) {
+                        try { existing.pause(); } catch (e) {}
+                        try { existing.removeAttribute('src'); existing.load(); } catch (e) {}
+                        dieBg.removeChild(existing);
+                    }
                     dieBg.classList.remove('visible');
-                    dieBg.style.backgroundImage = '';
                 }
             }
         });
@@ -63,6 +104,48 @@ jumbleBtn.addEventListener('click', () => {
     jumbleBtn.classList.remove('press');
     void jumbleBtn.offsetWidth;
     jumbleBtn.classList.add('press');
+
+    // briefly speed up the background die video (instant change, then restore)
+    try {
+        const dieBg = document.querySelector('#die-bg');
+        const vid = dieBg && dieBg.querySelector('video');
+        if (vid) {
+            // clear any previous restore timer
+            if (dieBg._speedTimeout) clearTimeout(dieBg._speedTimeout);
+            const original = vid.playbackRate || 1;
+            // instant large speed-up
+            const peak = 8;
+            vid.playbackRate = peak;
+
+            // cancel any previous ramp
+            if (dieBg._speedAnim) cancelAnimationFrame(dieBg._speedAnim);
+            if (dieBg._speedTimeout) { clearTimeout(dieBg._speedTimeout); dieBg._speedTimeout = null; }
+
+            // ease back to original over a longer duration
+            const duration = 1000; // ms - lasts longer
+            const start = performance.now();
+
+            function easeOutQuad(t) { return 1 - (1 - t) * (1 - t); }
+
+            function ramp(now) {
+                const elapsed = now - start;
+                let t = Math.min(1, elapsed / duration);
+                const eased = easeOutQuad(t);
+                // interpolate from peak -> original using eased progress
+                const value = peak + (original - peak) * eased;
+                try { vid.playbackRate = value; } catch (e) { /* ignore */ }
+
+                if (t < 1) {
+                    dieBg._speedAnim = requestAnimationFrame(ramp);
+                } else {
+                    dieBg._speedAnim = null;
+                    try { vid.playbackRate = original; } catch (e) { /* ignore */ }
+                }
+            }
+
+            dieBg._speedAnim = requestAnimationFrame(ramp);
+        }
+    } catch (e) { /* defensive: don't break on errors */ }
 });
 
 /**

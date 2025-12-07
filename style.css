@@ -1,8 +1,14 @@
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: "Jersey 10", sans-serif;
   font-weight: 400;
   font-style: normal;
-  background: #402408;
+  /* background: #402408; */
+  background-image: url('media/seamless.png');
+  background-repeat: repeat;
+  background-color: #402408;
 }
 
 header {
@@ -11,8 +17,27 @@ header {
   padding: 20px;
   text-align: center;
   border-radius: 1rem;
+  height: 100vh;
+  width: 80vw;
 }
 
+/* header-controls groups the interactive controls inside the header */
+#header-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* make selection area inside header slightly separated */
+#header-controls #selection-area {
+  margin-top: 0.5rem;
+}
+
+#selection-area {
+  width: 80%;
+}
 main {
   display: grid;
   justify-content: center;
@@ -52,6 +77,7 @@ main {
 #roll-value {
   font-size: 5rem;
   color: #ffe3c7;
+  
   width: 10vw;
   text-align: center;
 }
@@ -73,11 +99,11 @@ main {
   left: 48%;
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
-  /* slightly smaller so it isn't overpowering */
-  width: 14vw;
-  height: 14vw;
-  max-width: 260px;
-  max-height: 260px;
+  /* larger but still constrained */
+  width: 18vw;
+  height: 18vw;
+  max-width: 360px;
+  max-height: 360px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -97,15 +123,35 @@ main {
 
 /* when visible, fade in and run float animation */
 #die-bg.visible {
-  opacity: 0.5;
+  opacity: 1;
   visibility: visible;
   animation: dieFloat 3.6s ease-in-out infinite;
+}
+
+/* ensure any inserted video fills the container and doesn't capture pointer events */
+#die-bg video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
 
 #roll-value {
   position: relative;
   z-index: 2;
   margin: 0; /* remove default paragraph margin */
+}
+
+/* thin text border + subtle shadow for better contrast over backgrounds */
+#roll-value {
+  -webkit-text-stroke: 1px rgba(0,0,0,0.85);
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.9);
 }
 
 /* Zoom-in pop animation for the roll value */
@@ -144,7 +190,7 @@ main {
 #jumble-btn {
   background-color: #cf8719;
   margin: 3rem;
-  width: 12vw;
+  width: 20vw;
   height: 12vh;
   font-size: 2rem;
   transform-origin: center;
@@ -200,12 +246,12 @@ main {
 }
 
 .options:hover {
-  background-color: #6d4720;
+  background-color: #6b3b0b;
   color: #ffe3c7;
 }
 
 .options.active {
-  background-color: #6d4720;
+  background-color: #912d0b;
   color: #ffe3c7;
 }
 

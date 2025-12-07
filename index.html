@@ -14,49 +14,38 @@
     <header>
         <h1>Welcome to Jumble Drop</h1>
         <p>Your go-to DnD Dice Roller!</p>
-    </header>
-    <main>
-        <section id="buttons">
-            <section id="selection-options">
-                <div class="options" id="option-d4">
-                    d4
+
+        <!-- controls live in the header but are grouped separately -->
+        <section id="header-controls">
+            <section id="buttons">
+                <section id="selection-options">
+                    <div class="options" id="option-d4">d4</div>
+                    <div class="options" id="option-d6">d6</div>
+                    <div class="options" id="option-d8">d8</div>
+                    <div class="options" id="option-d10">d10</div>
+                    <div class="options" id="option-d12">d12</div>
+                    <div class="options" id="option-d20">d20</div>
+                    <div class="options" id="option-d%">d%</div>
+                </section>
+            </section>
+
+            <section id="secondary-btns">
+                <div class="options" id="clear-btn" style="display: none;">CLEAR</div>
+            </section>
+
+            <section id="selection-area">
+                <!-- roll display groups the decorative die and the numeric value so they stack -->
+                <div id="roll-display">
+                    <div id="die-bg" aria-hidden="true"></div>
+                    <p id="roll-value">0</p>
                 </div>
-                <div class="options" id="option-d6">
-                    d6
-                </div>
-                <div class="options" id="option-d8">
-                    d8
-                </div>
-                <div class="options" id="option-d10">
-                    d10
-                </div>
-                <div class="options" id="option-d12">
-                    d12
-                </div>
-                <div class="options" id="option-d20">
-                    d20
-                </div>
-                <div class="options" id="option-d%">
-                    d%
-                </div>
+                <div class="options" id="jumble-btn">JUMBLE!</div>
             </section>
         </section>
-        <section id="secondary-btns">
-            <div class="options" id="clear-btn" style="display: none;">
-                CLEAR
-            </div>
-        </section>
-        <section id="selection-area">
-            <!-- roll display groups the decorative die and the numeric value so they stack -->
-            <div id="roll-display">
-                <div id="die-bg" aria-hidden="true"></div>
-                <!-- <video src="dice_roll_reference-ezgif.com-gif-to-mp4-converter.mp4" id="dice-animation"></video> -->
-                <p id="roll-value">0</p>
-            </div>
-            <div class="options" id="jumble-btn">
-                JUMBLE!
-            </div>
-        </section>
+    </header>
+    <main>
+        <!-- main content (kept empty while controls live in header) -->
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
